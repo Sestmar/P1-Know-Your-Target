@@ -16,7 +16,7 @@ Tecnicas OBLIGATORIAS (las 8)
 - [x] Ficheros expuestos: robots.txt y security.txt
 - [x] Servicios expuestos: Shodan (web) + InternetDB
 - [x] Google dorks
-- [x] Correos: theHarvester (0 correos, 336 hosts) · Hunter.io (patron no visible en plan gratuito)
+- [x] Correos: theHarvester (0 correos, 336 hosts) · Hunter.io (patron no visible en plan gratuito) · commits de GitHub (patron probable nombre.apellido@)
 
 Tecnicas OPCIONALES
 - [x] Resolver y clasificar (dig www + whois IP) -> Akamai
@@ -411,4 +411,26 @@ $ sherlock airbnb --print-found
    Medium, YouTube, Threads, Snapchat, Dribbble, Behance, SpeakerDeck, HackerOne (confirmado: es el programa)
 -> GitHub github.com/airbnb: codigo abierto de la empresa -> fuente para tecnologias que usan
 siguiente: actualizar mapa.md
+```
+
+```
+2026-10-28 20:48 · objetivo: airbnb.com (in scope) · fuente: API publica de GitHub (tercero, no se toca Airbnb)
+Patron de correo: Hunter y theHarvester no lo dieron [18:15] [18:20] -> correos de autor en los commits
+de los repositorios publicos de github.com/airbnb (visto en Sherlock [19:07])
+$ for r in javascript lottie-android epoxy mavericks visx; do
+    curl -s "https://api.github.com/repos/airbnb/$r/commits?per_page=100" \
+      | jq -r 'if type=="array" then .[].commit.author.email else empty end'
+  done | tr 'A-Z' 'a-z' | grep '@airbnb\.com$' | sort -u \
+       | sed -E 's/@.*//; s/[a-z]+/x/g; s/[0-9]+/9/g' | sort | uniq -c | sort -rn
+-> 4 x.x : 4 correos @airbnb.com distintos y los 4 con la forma x.x
+-> patron probable: nombre.apellido@airbnb.com
+-> el sed convierte cada correo en su forma (letras -> x, numeros -> 9): no se ven ni se guardan correos ni nombres
+
+$ curl -s "https://api.github.com/repos/airbnb/javascript/commits?per_page=100" \
+    | jq -r 'if type=="array" then .[].commit.author.email else .message end' \
+    | sed -E 's/^[^@]*@/@/' | sort | uniq -c | sort -rn | head
+-> control (solo dominios): gmail.com 64 · users.noreply.github.com 16 · airbnb.com 4 · otros 1-8
+-> la mayoria de commits son de la comunidad (correos personales), no de empleados
+-> limitacion: muestra pequena (4 correos, ultimos 100 commits de 5 repos) -> patron probable, no confirmado
+siguiente: anotar el patron en la seccion 4 del mapa
 ```

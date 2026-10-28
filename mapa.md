@@ -82,7 +82,10 @@ Otros dominios vistos:
 ## 4. Correos y personas
 
 - **Dominio de correo:** `@airbnb.com`, sobre Google Workspace `[11:51]`.
-- **Patron de correo:** no se pudo obtener. Hunter (plan gratuito) no lo muestra y theHarvester no encontro ningun correo con crtsh y duckduckgo; ademas, Bing ya no esta soportado en la version 4.11.1 `[18:13]` `[18:15]` `[18:20]`.
+- **Patron de correo:** probablemente `nombre.apellido@airbnb.com` `[20:48]`.
+  - Sale de los commits de 5 repositorios publicos de `github.com/airbnb`: los 4 correos `@airbnb.com` distintos tienen la forma `x.x`.
+  - Es una muestra pequena: la mayoria de commits son de la comunidad, con correos personales. Por eso es un patron probable, no confirmado.
+  - Hunter (plan gratuito) no lo muestra y theHarvester no encontro ningun correo con crtsh y duckduckgo; Bing ya no esta soportado en la version 4.11.1 `[18:13]` `[18:15]` `[18:20]`.
 - **Volumen:** Hunter conoce 4.760 correos: 4.484 de personas, 414 de directivos y 276 genericos `[18:20]`.
 - **Departamentos** (segun los correos conocidos): IT/Engineering 1.251, Operations 560, Management 341, Support 256, Sales 211, Legal 180, Marketing 175, Finance 173 `[18:30]`.
 - **Identidad corporativa:** SSO con Okta (`airbnb.okta.com`, que es de terceros) y Google IAP para herramientas internas `[11:51]` `[16:49]`.
