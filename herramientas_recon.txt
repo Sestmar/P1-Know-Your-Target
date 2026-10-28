@@ -1,0 +1,115 @@
+=====================================================================
+ PRACTICA: RECONOCIMIENTO PASIVO (OSINT) - Hacking Etico, Unidad 1
+=====================================================================
+
+Objetivo: airbnb.com
+Alcance:  ver scope.txt  (regla: sin autorizacion no se toca nada)
+Programa: https://hackerone.com/airbnb  (comprobar alli el scope oficial)
+Notas:    cada comando y su resultado se apuntan en cuaderno.md
+
+Herramientas a utilizar (en el orden de la presentacion):
+
+---------------------------------------------------------------------
+ 1. WHOIS - Registro del dominio
+---------------------------------------------------------------------
+$ whois airbnb.com                         # quien lo registro, cuando, con que proveedor y contactos
+                                           # Sin terminal: who.is · ICANN Lookup
+
+---------------------------------------------------------------------
+ 2. DIG - Registros DNS
+---------------------------------------------------------------------
+$ dig +short ns airbnb.com                 # quien gestiona el dominio
+$ dig +short mx airbnb.com                 # adonde va el correo
+$ dig +short txt airbnb.com                # SPF: quien envia correo en su nombre
+$ dig +short txt _dmarc.airbnb.com         # DMARC: postura antispoofing
+                                           # Sin terminal: DNSDumpster · MXToolbox
+
+---------------------------------------------------------------------
+ 3. SUBFINDER / CRT.SH - Subdominios (cada subdominio es una posible puerta)
+---------------------------------------------------------------------
+$ subfinder -d airbnb.com -silent          # subdominios desde fuentes pasivas
+$ curl -s 'https://crt.sh/?q=%25.airbnb.com&output=json' \
+    | jq -r '.[].name_value' | sort -u     # subdominios sacados de certificados SSL publicos
+                                           # Sin terminal: crt.sh · DNSDumpster
+                                           # Momento IA: pasar la lista a un LLM para priorizar
+                                           # cuales investigar primero (y validarlo tu)
+
+---------------------------------------------------------------------
+ 4. TECNICA - Resolver y clasificar (¿donde vive de verdad?)
+---------------------------------------------------------------------
+$ dig +short www.airbnb.com                # a que IP resuelve el nombre
+$ whois <IP> | grep -iE 'orgname|netname|country'
+                                           # de quien es esa IP:
+                                           #  - Cloudflare/Akamai/CloudFront/Imperva -> detras de CDN/WAF
+                                           #    (hablas con el escudo, no con el servidor)
+                                           #  - maquina en la nube (AWS, GCP...) -> expuesto directo, prioridad
+                                           # Sin terminal: nslookup.io · ipinfo.io · bgp.he.net
+
+---------------------------------------------------------------------
+ 5. NETCRAFT - Huella tecnologica (no tiene comando, se usa en web)
+---------------------------------------------------------------------
+https://sitereport.netcraft.com/?url=https://www.airbnb.com
+                                           # tecnologias, hosting, CDN/WAF, historico y datos de red
+
+---------------------------------------------------------------------
+ 6. TECNICA - Ficheros expuestos
+---------------------------------------------------------------------
+$ curl -s https://www.airbnb.com/robots.txt                # rutas que no quieren indexar
+$ curl -s https://www.airbnb.com/.well-known/security.txt  # contacto oficial de seguridad
+
+---------------------------------------------------------------------
+ 7. WAYBACK MACHINE - Historico del sitio
+---------------------------------------------------------------------
+$ curl -s 'https://web.archive.org/cdx/search/cdx?url=airbnb.com/*&collapse=urlkey&fl=original' \
+    | grep -iE '/api/|\.json'              # URLs antiguas archivadas, filtrando APIs y ficheros JSON
+                                           # Sin terminal: web.archive.org
+
+---------------------------------------------------------------------
+ 8. SHODAN - Servicios expuestos (indexa puertos y banners, no paginas)
+---------------------------------------------------------------------
+  hostname:airbnb.com                      # busqueda en shodan.io por dominio
+  org:"Airbnb"                             # busqueda por organizacion
+$ curl -s https://internetdb.shodan.io/<IP>   # puertos/vulns conocidos de una IP, sin cuenta
+                                           # Complemento: Censys
+
+---------------------------------------------------------------------
+ 9. GOOGLE DORKS - Lo que los buscadores han indexado (en el navegador)
+---------------------------------------------------------------------
+  site:airbnb.com filetype:pdf             # documentos publicados
+  site:airbnb.com intitle:"index of"       # listados de directorios abiertos
+  site:airbnb.com inurl:login              # paneles de acceso
+  site:pastebin.com "airbnb.com"           # menciones en pastes (Pastebin)
+                                           # Catalogo: Google Hacking Database (GHDB)
+
+---------------------------------------------------------------------
+ 10. EXIFTOOL - Metadatos de documentos e imagenes
+---------------------------------------------------------------------
+$ exiftool documento.pdf foto.jpg          # autor, software, rutas internas, GPS...
+                                           # siempre en local (subirlo a un visor online deja rastro)
+                                           # Fotos: busqueda inversa en Yandex · TinEye
+
+---------------------------------------------------------------------
+ 11. THEHARVESTER - Correos y personas
+---------------------------------------------------------------------
+$ theHarvester -d airbnb.com -b crtsh,duckduckgo,bing
+                                           # correos, nombres, hosts -> deducir el patron de correo
+                                           # Sin terminal: Hunter.io (Domain Search)
+
+---------------------------------------------------------------------
+ 12. HAVE I BEEN PWNED - Credenciales filtradas
+---------------------------------------------------------------------
+$ curl -s https://api.pwnedpasswords.com/range/5BAA6 | grep 1E4C9
+                                           # ¿esta filtrada "password"? solo se envian 5 caracteres del hash
+                                           # Correos: en haveibeenpwned.com · En volumen: API o DEHASHED
+
+---------------------------------------------------------------------
+ 13. SHERLOCK - Identidad y alias
+---------------------------------------------------------------------
+$ sherlock airbnb                          # busca el mismo usuario en cientos de plataformas
+                                           # Sin terminal: WhatsMyName
+
+---------------------------------------------------------------------
+ Extra (no esta en las diapositivas)
+---------------------------------------------------------------------
+  osintframework.com                       # mapa de herramientas OSINT por categoria
+  Bugcrowd / HackerOne                     # donde mirar si la empresa tiene programa y su alcance

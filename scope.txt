@@ -1,0 +1,31 @@
+# scope.txt · programa: Airbnb (https://hackerone.com/airbnb/policy_scopes) · consultado: 2026-10-28
+# Higher Impact Scope
+# airbnb.com no figura tal cual en la tabla, pero es el dominio raiz de www.airbnb.com y *.airbnb.com
+# (en alcance) y el scope-guard no lo cubre con el comodin; solo se usa para whois y DNS
+airbnb.com
+*.airbnb.com
+*.airbnb.org
+*.musta.ch
+*.airbnbpayments.com
+# Lower Impact Scope
+*.withairbnb.com
+*.muscache.com
+*.luxuryretreats.com
+*.hoteltonight.com
+*.hoteltonight-test.com
+*.byairbnb.com
+*.atairbnb.com
+*.airbnbcitizen.com
+*.airbnb-aws.com
+# fuera de alcance (no se toca):
+# - activo de terceros bajo *.airbnb.com (CNAME a Salesforce/ExactTarget)
+!image.mail.airbnb.com
+# - marcados "Ineligible" en HackerOne
+!demo.urbandoor.com
+!admin.demo.urbandoor.com
+!provider.demo.urbandoor.com
+!luckeyhomes.com
+!luckey.partners
+!luckey.in
+!luckey.fr
+!luckey.app

@@ -1,0 +1,62 @@
+== www.airbnb.com
+88.221.213.50
+104.90.205.96
+104.90.205.74
+== api.airbnb.com
+88.221.213.64
+88.221.213.97
+88.221.213.112
+== assets.airbnb.com
+e74147.a.akamaiedge.net.
+104.90.205.66
+88.221.213.112
+== callbacks.airbnb.com
+callbacks.production.global.product.origins.airbnb.net.
+us-east-1.callbacks.product.ingress.airbnb.net.
+34.227.64.120
+== support-api.airbnb.com
+== next.airbnb.com
+23.204.132.196
+23.204.132.241
+== one.airbnb.com
+internal-tools.iap.airbnb.biz.
+136.107.58.148
+== m.airbnb.com
+a9170e05f136aeb06.awsglobalaccelerator.com.
+13.248.132.14
+76.223.34.100
+== admin.airbnb.com
+internal-tools.iap.airbnb.biz.
+136.107.58.148
+== admin-staging.airbnb.com
+internal-tools.iap.airbnb.biz.
+136.67.55.64
+== git.airbnb.com
+a9170e05f136aeb06.awsglobalaccelerator.com.
+13.248.132.14
+76.223.34.100
+== grafana.iac.airbnb.com
+iap-generic01-global-prod.airbnb.biz.
+34.160.96.171
+== deployboard.airbnb.com
+a9170e05f136aeb06.awsglobalaccelerator.com.
+13.248.132.14
+76.223.34.100
+== internal.airbnb.com
+== ws.airbnb.com
+airbnb-ws.production.global.product.origins.airbnb.net.
+us-east-1.kratos.product.ingress.airbnb.net.
+54.90.191.231
+== worldpay.callbacks.airbnb.com
+us-east-1.callbacks.product.ingress.airbnb.net.
+3.215.46.20
+== amex-mtls.airbnb.com
+== developer.airbnb.com
+76.223.34.100
+13.248.132.14
+== staging.airbnb.com
+34.236.224.3
+== preprod.airbnb.com
+ipv4.global.airbnb-web.preprod.airbnb.edgekey.net.
+88.221.213.113
+104.90.205.72
